@@ -1,0 +1,36 @@
+<script>
+        const SB_URL = 'https://project.supabase.co';
+        const SB_KEY = 'anon_key';
+        const _supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        async function registrarAcesso() {
+            try {
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+
+                await _supabase.from('acessos_alore').insert([{
+                    ip: ipData.ip,
+                    referrer: document.referrer || 'Direto',
+                    user_agent: navigator.userAgent,
+                    idioma: navigator.language,
+                    path: window.location.pathname
+                }]);
+            } catch (e) {
+                console.error("Erro no registro:", e);
+            } finally {
+                
+                setTimeout(() => {
+                    window.location.href = 'https://ia.pro.br/vendas/?d=alo.re';
+                }, 5000);
+            }
+        }
+
+        registrarAcesso();
+
+        // Segurança caso o fetch do IP trave
+        setTimeout(() => {
+            if (window.location.href.indexOf('vendas') === -1) {
+                window.location.href = 'https://ia.pro.br/vendas/?d=alo.re';
+            }
+        }, 7000);
+    </script>
